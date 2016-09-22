@@ -12,42 +12,24 @@ class Distance {
       
     }
   
-  int getDistance(){
+  float getDistance(){
 
       if(N <250) {
         s = analogRead(op_pin); 
         Serial.println("msg_initialising sensor");
-        shiftVals();
+        calcAvg();
+        minRawVal = avg;
         N++;
         return -1;
         }
-
-      s = analogRead(op_pin);
-
-      shiftVals();
-
-      vals[19] = s;
-      sum+= vals[19];
-      avg = sum/20;
-
-     /** if(avg < minRawVal){
-          minRawVal = avg;
-          Serial.print("min_");
-          Serial.println(avg);
-          return -1;
-        }
-
-      if(avg > maxRawVal){
-          maxRawVal = avg;
-          Serial.print("max_");
-          Serial.println(avg);
-          return -1;
-        }
-      **/
+        
+      calcAvg();
+      
       //def = ((avg-minRawVal)/interval) * maxDef;
       def = (avg-minRawVal)/res;
       //Serial.println(avg);
       //Serial.println(def);
+      if(def<0){minRawVal += -def; def=0;}
       return def;
     }
 
@@ -63,14 +45,19 @@ class Distance {
     long sum;
     int i, N = 0;
 
-    void shiftVals(){
-      
+    void calcAvg(){
+
+      s = analogRead(op_pin);
         sum=0;
         for(i=0; i<19; i++){
           vals[i] = vals[i+1];
           sum += vals[i];
         }
         
+        vals[19] = s;
+        sum+= vals[19];
+        avg = sum/20.0;
+      
       }
   
   };

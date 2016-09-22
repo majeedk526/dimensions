@@ -1,7 +1,10 @@
 #include "Distance.h"
+#include "Vibration.h"
 
 Distance<0> distance;
-int disp;
+Vibration<1> frq1;
+Vibration<2> frq2;
+float disp;
 
 void setup() {
   // put your setup code here, to run once:
@@ -18,6 +21,16 @@ void loop() {
   if(disp!=-1){
       Serial.println(disp);  
     }
-  
-  delay(10);
+
+   disp = frq1.getFreq();
+  if(disp!=-1){
+      Serial.println(disp);  
+    }
+
+   disp = frq2.getFreq();
+  if(disp!=-1){
+      Serial.println(disp);  
+    }
+    
+  delay(2);
 }
