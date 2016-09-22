@@ -9,7 +9,6 @@ void setup() {
   Serial.begin(9600);
   Serial.println("msg_setup");
   distance.configure();
-  
 }
 
 void loop() {

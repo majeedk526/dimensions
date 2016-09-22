@@ -56,7 +56,7 @@ class Distance {
     float def, avg;
     float res = 2.5;
      int maxRawVal = 450;
-     int minRawVal = 398;
+     int minRawVal = 314;
     const float maxDef = 20.0; // in mm
     int interval = maxRawVal - minRawVal;
     int vals[20];
