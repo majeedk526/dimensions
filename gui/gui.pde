@@ -79,10 +79,11 @@ void setup() {
  // port = new Serial(this,portNames[0], 9600);
   
   updateMinVal(100);
-  updateMaxVal(200);
+  updateThreshVal(200);
   updateMsg("messages");
   updateDisp(20.1);
-  updateFreq(2.3, 5.4);
+  updateFreq1(2.3);
+  updateFreq2(4.3);
   
 }
 
@@ -99,15 +100,17 @@ void draw(){
   if(data!=null){
     String[] s = data.split("_"); //<>//
     
+    try {
+    
     if(s[0].equals("min")){ //<>//
       
       updateMinVal(Float.parseFloat(s[1]));
       return;
     }
     
-    if(s[0].equals("max")){
+    if(s[0].equals("t")){ // threshold of vibartion snesor
      
-      updateMaxVal(Float.parseFloat(s[1]));
+      updateThreshVal(Float.parseFloat(s[1]));
       return;
       
     }
@@ -123,13 +126,23 @@ void draw(){
       return;
     }
     
-    if(s[0].equals("f")){
+    if(s[0].equals("f1")){
       
-      updateFreq(Float.parseFloat(s[1]), Float.parseFloat(s[2] ));
+      updateFreq1(Float.parseFloat(s[1]));
       return;
     
     }
     
+    if(s[0].equals("f2")){
+      
+      updateFreq2(Float.parseFloat(s[1]));
+      return;
+    
+    }
+   } catch(Exception e){
+     
+     updateMsg(e.toString());  
+   }
   }
   
   delay(100);
@@ -159,13 +172,13 @@ public void updateMinVal(float val){
   
 }
 
-public void updateMaxVal(float val){
+public void updateThreshVal(float val){
   
   fill(255);
     rect(width-150, 190, 130, 25);
    fill(0);
     textSize(16);
-   text("Max : " + val, width-120, 210);
+   text("Thr : " + val, width-120, 210);
   
 }
 
@@ -182,23 +195,28 @@ public void updateMsg(String s){
 public void updateDisp(float val){
 
   fill(255);
-  rect(msg_width-200, msg_height-35, 150, 50);
+  rect(msg_width-200, msg_height-35, 200, 50);
   fill(0);
   textSize(56);
   text(df.format(val), msg_width-170, msg_height+10);
 
 }
 
-public void updateFreq(float f1, float f2){
+public void updateFreq1(float f){
 
   fill(255);
-  rect(msg_width-200, msg_height+21, 150, 50);
+  rect(msg_width-200, msg_height+21, 200, 50);
   fill(0);
   textSize(56);
-  text(df.format(f1), msg_width-170, msg_height+67);
-  fill(255);
-  rect(msg_width-200, msg_height+76, 150, 50);
+  text(df.format(f), msg_width-170, msg_height+67);
+  
+}
+
+public void updateFreq2(float f){
+
+    fill(255);
+  rect(msg_width-200, msg_height+76, 200, 50);
   fill(0);
-  text(df.format(f2), msg_width-170, msg_height+120);
+  text(df.format(f), msg_width-170, msg_height+120);
   
 }

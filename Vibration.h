@@ -28,23 +28,29 @@ class Vibration {
 
       val = analogRead(pin);
 
-  if(n<255){
+  if(n<100){
     n++;
     calcAvg();
     thresh = avg;
-    Serial.print("initalising : ");
+    Serial.print("msg_init vib sen ");
     Serial.println(avg);
+    if(n==99){
+        Serial.print("t_");
+        Serial.println(thresh);
+      }
     return -1;
     }  
-    
+
+    calcAvg();
+    //Serial.println(avg);
    tCount++;
-  if(val > thresh && !p1) {
+  if(avg > thresh && !p1) {
       p1 = true;
       p2 = false;
       return -1;
     }
 
-  if(val < thresh && !p2){
+  if(avg < thresh && !p2){
       p1 = false;
       p2 = true;
       freq = 1/(tCount*0.02);
@@ -54,7 +60,7 @@ class Vibration {
   if(tCount>200){
       freq = 0;
     }
-    Serial.println(freq);
+    return freq;
     
   
   }
@@ -71,8 +77,5 @@ class Vibration {
         sum+= val;
         avg = sum/20;
         
-      }
-
-   
-  
+  }
  };

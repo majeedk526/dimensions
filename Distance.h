@@ -7,56 +7,62 @@ class Distance {
   public:
   
   void configure(){
-      Serial.println("msg_Cofiguring pin");
       pinMode(op_pin, INPUT);
       
     }
   
   float getDistance(){
 
-      if(N <250) {
+      if(N <150) {
         s = analogRead(op_pin); 
-        Serial.println("msg_initialising sensor");
         calcAvg();
         minRawVal = avg;
+       // Serial.print("msg_init dist sen");
+        //Serial.println(avg);
         N++;
+        if(N==149){
+          //  Serial.print("min_");
+            //Serial.println(minRawVal);
+          }
         return -1;
         }
         
       calcAvg();
       
       //def = ((avg-minRawVal)/interval) * maxDef;
-      def = (avg-minRawVal)/res;
+      //Serial.print("avg_");
       //Serial.println(avg);
-      //Serial.println(def);
-      if(def<0){minRawVal += -def; def=0;}
+      def = (avg-minRawVal)/res;
+      if(def-prev < 0.5 && def-prev > -0.5) {def = prev;}
+      prev = def;
+      if(def<0.5){def=0;}
       return def;
     }
 
     private:
     int s;
-    float def, avg;
+    float def, avg, prev;
     float res = 2.5;
      int maxRawVal = 450;
      int minRawVal = 314;
     const float maxDef = 20.0; // in mm
     int interval = maxRawVal - minRawVal;
-    int vals[20];
+    int vals[10];
     long sum;
     int i, N = 0;
 
     void calcAvg(){
 
       s = analogRead(op_pin);
-        sum=0;
-        for(i=0; i<19; i++){
+        sum=0; avg = 0;
+        for(i=0; i<9; i++){
           vals[i] = vals[i+1];
           sum += vals[i];
         }
         
-        vals[19] = s;
-        sum+= vals[19];
-        avg = sum/20.0;
+        vals[9] = s;
+        sum+= s;
+        avg = sum/10.0;
       
       }
   
