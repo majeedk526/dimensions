@@ -1,7 +1,7 @@
 #include "Distance.h"
 #include "Vibration.h"
 
-Distance<0> distance;
+Distance<A0> distance;
 //Vibration<1> frq1;
 //Vibration<2> frq2;
 float disp;
