@@ -5,6 +5,7 @@ template <byte op_pin>
 class Distance {
 
   public:
+  int N=0;
   
   void configure(){
       pinMode(op_pin, INPUT);
@@ -22,6 +23,7 @@ class Distance {
         if(N==149){
             Serial.print("min_");
             Serial.println(minRawVal);
+            Serial.println("msg_READY");
           }
         return -1;
         }
@@ -48,7 +50,7 @@ class Distance {
     int interval = maxRawVal - minRawVal;
     int vals[30];
     long sum;
-    int i, N = 0;
+    int i;
 
     void calcAvg(){
 

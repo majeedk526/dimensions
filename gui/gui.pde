@@ -1,4 +1,4 @@
-import grafica.*; //<>// //<>//
+import grafica.*;  //<>//
 
 import processing.serial.*;
 import controlP5.*;
@@ -44,14 +44,14 @@ int counter = 0;
 void setup() {
   
   cp5 = new ControlP5(this);
-  df = new DecimalFormat("#.0");
+  df = new DecimalFormat("0.0");
   
   PImage logo = loadImage("cesslogo.png");
   
   // setup window
   background(255);
-  size(1300, 800);
-  image(logo,110,20, 300,140);
+  size(1100, 800);
+  image(logo,10,20, 300,140);
   
   
   dispHOffset = height/2;
@@ -89,9 +89,9 @@ void setup() {
   text("Current : ", label_width, label_height);
   text("Highest : ", label_width+300, label_height);
   
-  //textSize(20);
-  //fill(color(150,100,50));
-  //text("Frequency (Hz) : ", freqWOffset-650 , freqHOffset);
+  textSize(20);
+  fill(color(150,100,50));
+  text("Frequency (Hz) : ", freqWOffset-500 , freqHOffset-2);
   
   // setup msg
   msg_width = width/2 + 170; msg_height = height/2-50;
@@ -103,8 +103,8 @@ void setup() {
   }
   
   dList = cp5.addDropdownList("list")
-                .setPosition(width-160,25)
-                .setSize(150,200)
+                .setPosition(width-200,25)
+                .setSize(100,200)
                 .setItemHeight(20)
                 .setBarHeight(25)
                 .setBackgroundColor(color(100,100,100))           
@@ -112,27 +112,36 @@ void setup() {
                 .setColorLabel(255);
   
   cp5.addButton("btnSCAN")
-     .setPosition(width-220,25)
+     .setPosition(width-260,25)
      .setSize(50,25)
      .setColorBackground(color(100,100,100))
      .setCaptionLabel("SCAN");
   
+  cp5.addButton("btnCLR")
+     .setPosition(width-260,55)
+     .setSize(50,25)
+     .setColorBackground(color(100,100,100))
+     .setCaptionLabel("CLEAR");
+  
+  cp5.addButton("btnRST")
+     .setPosition(width-260,85)
+     .setSize(50,25)
+     .setColorBackground(color(100,100,100))
+     .setCaptionLabel("RESET");
+     
   dList.addItems(portNames);
-  
-  
-  
- // port = new Serial(this,portNames[0], 9600);
   
   updateMinVal(100);
   updateThreshVal(200);
   updateMsg("messages");
-  updateDisp(0);
-  updateFreq1(2.3);
+  updateDisp(6.3);
+  updateDisp(5.1);
+  updateFreq1(0);
 }
 
 void draw(){
-  
-  updatePlot(random(-50,50));
+  fill(255);
+  updateFreq1(random(0,50));
   
   if(port == null) {return;}
   
@@ -189,8 +198,6 @@ void draw(){
 
 public void list(float choice){
  
-  //println(choice);
-  //println(cp5.get(DropdownList.class,"list").getValue());
   try {
     updateMsg("initiaitng port " + portNames[(int) choice]);
     port = new Serial(this,portNames[(int) choice], 9600);
@@ -203,37 +210,37 @@ public void list(float choice){
 public void updateMinVal(float val){
 
   fill(255);
-    rect(width-150, 80, 130, 25); 
+    rect(width-200, 60, 100, 25); 
   fill(0);
   textSize(16);
-   text("Min : " + val, width-120, 100);
+   text("Min : " + val, width-190, 80);
   
 }
 
 public void updateThreshVal(float val){
   
   fill(255);
-    rect(width-150, 105, 130, 25);
+    rect(width-200, 85, 100, 25);
    fill(0);
     textSize(16);
-   text("Thr : " + val, width-120, 125);
+   text("Thr : " + val, width-190, 105);
   
 }
 
 public void updateMsg(String s){
  
   fill(255);
-  rect(width/2-370, height-50, 800, 25);
+  rect(width/2-370, height-100, 800, 25);
   fill(0);
   textSize(16);
-   text(s, width/2-200, height-35);
+   text(s, width/2-200, height-85);
 
 }
 
 public void updateDisp(float val){
   
   fill(255);
-  rect(msg_width-350, msg_height-35, 150, 50);
+  rect(msg_width-350, msg_height-35, 170, 50);
   fill(0);
   textSize(56);
   text(df.format(val), msg_width-320, msg_height+10);
@@ -241,7 +248,7 @@ public void updateDisp(float val){
   if(dhighest < val){dhighest = val;}
     
     fill(255);
-    rect(msg_width-50, msg_height-35, 150, 50);
+    rect(msg_width-50, msg_height-35, 170, 50);
     fill(0);
     textSize(56);
     text(df.format(dhighest), msg_width-30, msg_height+10);  
@@ -250,11 +257,12 @@ public void updateDisp(float val){
 
 public void updateFreq1(float f){
 
-  //fill(255);
-  //rect(msg_width-500, msg_height+125, 50, 30);
-  //fill(0);
-  //textSize(26);
-  //text(df.format(f), msg_width-620, msg_height+190);
+  fill(255);
+  rect(freqWOffset-340 , freqHOffset-31, 60, 30);
+  fill(color(200,50,50));
+  textSize(26);
+  text(df.format(f), freqWOffset-340 , freqHOffset-2);
+  updatePlot(f);
   
 }
 
@@ -267,13 +275,11 @@ public void setupGraph(){
   }
   
   plot = new GPlot(this);
-  plot.setPos(freqWOffset-600,freqHOffset);
-  plot.setOuterDim(1200,300);
+  plot.setPos(freqWOffset-520,freqHOffset);
+  plot.setOuterDim(1000,300);
   plot.setXLim(0, 500);
-  plot.setYLim(-50, 50);
+  plot.setYLim(0, 50);
   plot.activatePanning();
-  
-  //updatePlot(0);
   
   plot.setPoints(points);
 }
@@ -297,17 +303,31 @@ public void setupGraph(){
  }
 
 public void btnSCAN(){
- cp5.get(Button.class,"btnSCAN").getName();
+ //cp5.get(Button.class,"btnSCAN").getName();
  dList.clear(); 
  portNames = Serial.list();
   dList.addItems(portNames);
 }
 
-/**public void updateFreq2(float f){
+public void btnCLR(){
 
-    fill(255);
-  rect(msg_width-200, msg_height+76, 200, 50);
-  fill(0);
-  text(df.format(f), msg_width-170, msg_height+120);
+  dhighest = 0;
+  updateDisp(0);
   
-}**/
+}
+
+public void btnRST(){
+
+  try{
+    
+    port.write('u');
+    updateDisp(0);
+    dhighest = 0;
+    
+  } catch (Exception e){
+    
+    updateMsg(e.toString());
+  }
+  
+  
+}

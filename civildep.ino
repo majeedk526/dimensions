@@ -2,20 +2,25 @@
 #include "Vibration.h"
 
 Distance<A0> distance;
-//Vibration<1> frq1;
-//Vibration<2> frq2;
+Vibration<1> frq1;
 float disp;
+char c;
 
 void setup() {
-  // put your setup code here, to run once:
 
   Serial.begin(9600);
   distance.configure();
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
 
+  if(Serial.available()){
+    c = Serial.read();
+
+    if(c=='u'){distance.N = 0;}
+    
+    }
+  
   disp = distance.getDistance();
   
   if(disp!=-1){
@@ -23,17 +28,12 @@ void loop() {
       Serial.println(disp);  
     }
     
-   //disp = frq1.getFreq();
+   disp = frq1.getFreq();
   if(disp!=-1){
-      //Serial.print("f1_");
-      //Serial.println(disp);  
+      Serial.print("f1_");
+      Serial.println(disp);  
     }
 
-   //disp = frq2.getFreq();
-  if(disp!=-1){
-      //Serial.print("f2_");
-      //Serial.println(disp);  
-    }
     
   delay(40);
 }
