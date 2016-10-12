@@ -9,3 +9,6 @@ The system has been developed using following components
 
 #Screen
 ![Main Screen] (./screens/screen1.png)
+
+#Video
+[Watch on youtube](https://youtu.be/Ge030O6umqk)
